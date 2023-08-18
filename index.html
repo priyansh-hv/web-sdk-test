@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="https://hv-camera-web-sg.s3-ap-southeast-1.amazonaws.com/hyperverge-web-sdk@7.5.0/src/sdk.min.js"></script>
+  </head>
+
+  <body>
+    <div>
+      <button type="button" onclick="starOnboarding();">
+        Start Onboarding
+      </button>
+    </div>
+  </body>
+  <script>
+    function starOnboarding() {
+      var accessToken =
+        "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBJZCI6InZuc25yOSIsImhhc2giOiJkY2M4ZTM1YjE4ZTRjODlhZDUzYzRhZDRkNDgwNGE2ZDVmMTk2MDVkNTFhYWVjZGQ2MzVmNTE4N2U1MjAwOTU4IiwiaWF0IjoxNjkyMzY2NjE1LCJleHAiOjE2OTIzODMwMTUsImp0aSI6IjVlYjBmNzIxLTU5ZTUtNDc5ZC1iMTI4LTQyYzYyNjQzNjM1NSJ9.meckSiQX_ZVJUXzQozaMXP8D22XJRvR6Jz7iBIibNaplyKGYA1ecIqT2bEkxUAvb3TY2uVUU6ITWlIaZ31riIjk4lobqk4LQpDHh3Cp_RVGYaIjCTbE7ofL35VYXz1iiQTicopsfu3kbSR4v2yUZIgdhBM8JN0-UgAmgs9qMF6M";
+
+      var transactionId = "hv-testing-18aug-829422";
+
+      var workflowId = "kyc";
+
+      const hyperKycConfig = new window.HyperKycConfig(
+        accessToken,
+        workflowId,
+        transactionId
+      );
+
+      const handler = (HyperKycResult) => {
+        switch (HyperKycResult.status) {
+          case "user_cancelled":
+            // user cancelled
+            break;
+          case "error":
+            // failure
+            break;
+          case "auto_approved":
+          case "auto_declined":
+          case "needs_review":
+            // workflow success
+            break;
+        }
+
+        // to access the sdkRespone in the console
+        // console.log(JSON.stringify(HyperKycResult.details));
+      };
+
+      const customInputs = {
+        pan: "NXGPS0775G",
+        dob: "15-10-2000"
+      }
+      hyperKycConfig.setInputs(customInputs)
+
+      window.HyperKYCModule.launch(hyperKycConfig, handler);
+    }
+  </script>
+</html>
